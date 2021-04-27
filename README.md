@@ -1,3 +1,173 @@
+## Instalação
+
+A arquitetura é desenvolvida utilizando o framework Laravel.
+Para utilizar o sistema, é preciso ter instalado o ambiente com as seguintes configurações:
+
+```sh
+php: "^7.3|^8.0",
+laravel/framework: "^8.12",
+MySQL Server: "^5.7",
+Apache: "^2.4.46",
+Composer version: "^2.0.8"
+cURL: "^7.70.0",
+```
+Ao clonar o diretório, utilizae o comando  composer para instalar as dependencias dos diretórios
+```sh
+composer:install
+artisan migrate
+```
+Para instanciar as configurações do banco de dados, primeiramente é editar o arquivo ".env" alterando os campos de DB_DATABASE, DB_USERNAME, DB_PASSWORD. 
+
+```sh
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=*base*
+DB_USERNAME=root
+DB_PASSWORD=
+```
+Em sequencia execute o comando artisan para criar as tabelas referenciadas pelas migrations 
+```sh
+artisan migrate
+```
+
+## Execução
+
+O sistema funciona com base nos dados da tabela cities,  aonde será consultado na api OpenWeathers, passando por parâmetro as coordenadas de latitude e longitude.
+Para consumir o serviço OpenWeather via arquitetura desenvolvida, é preciso utilizar a ferramenta curl e passar uma url previamente definida.
+Entre as opões de url é possivel passar por parâmetro um id que referencia a cidade que se deseja consultar os dados metereoógicos ou consultar todas as cidades que possuem as coordenadas gravadas no banco.
+
+## Exemplo de utilização
+
+Consultar todas cidades cadastradas:
+
+```sh
+curl http://127.0.0.1:8000/api/cities
+```
+Resposta
+```sh
+StatusCode        : 200
+StatusDescription : OK
+Content           : [{"id":1,"name":"Santa Maria","latitude":"-29.6841666667","longitude":"-53.8069444444","gmt":-3,"created_at":null,"updated_at":null},{"id":2,"name":"Campo
+                    Grande","latitude":"-20.4427777778","longitud...
+RawContent        : HTTP/1.1 200 OK
+                    Connection: close
+                    Cache-Control: no-cache, private
+                    Date: Tue, 27 Apr 2021 09:33:03 GMT,Tue, 27 Apr 2021 09:33:03 GMT
+                    X-Powered-By: PHP/7.4.13
+                    Content-Type: a...
+Forms             : {}
+Headers           : {[Host, 127.0.0.1:8000], [Connection, close], [Cache-Control, no-cache, private], [Date, Tue, 27 Apr 2021 09:33:03 GMT,Tue, 27 Apr 2021 09:33:03 GMT]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 515
+```
+:
+Busca na api todas as cidade do banco e grava no banco os dados selecionados
+```sh
+PS C:\xampp\htdocs\openweather\api> curl http://127.0.0.1:8000/api/getweater/
+```
+Resposta
+```sh
+StatusCode        : 200
+StatusDescription : OK
+Content           : [{"id":1,"name":"Santa Maria","latitude":"-29.6841666667","longitude":"-53.8069444444","gmt":-3,"created_at":null,"updated_at":null},{"id":2,"name":"Campo 
+                    Grande","latitude":"-20.4427777778","longitud...
+RawContent        : HTTP/1.1 200 OK
+                    Host: 127.0.0.1:8000
+                    Connection: close
+                    Cache-Control: no-cache, private
+                    Date: Tue, 27 Apr 2021 12:24:50 GMT,Tue, 27 Apr 2021 12:24:50 GMT
+                    X-Powered-By: PHP/7.4.13
+                    Content-Type: a...
+Forms             : {}
+Headers           : {[Host, 127.0.0.1:8000], [Connection, close], [Cache-Control, no-cache, private], [Date, Tue, 27 Apr 2021 12:24:50 GMT,Tue, 27 Apr 2021 12:24:50 GMT]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 515
+```
+
+Busca na api a cidade referida pelo id do banco e grava no banco os dados selecionados
+```sh
+PS C:\xampp\htdocs\openweather\api> curl http://127.0.0.1:8000/api/getweater/1
+```
+Resposta
+```sh
+StatusCode        : 200
+StatusDescription : OK
+Content           : [{"id":1,"name":"Santa Maria","latitude":"-29.6841666667","longitude":"-53.8069444444","gmt":-3,"created_at":null,"updated_at":null},{"id":2,"name":"Campo 
+                    Grande","latitude":"-20.4427777778","longitud...
+RawContent        : HTTP/1.1 200 OK
+                    Host: 127.0.0.1:8000
+                    Connection: close
+                    Cache-Control: no-cache, private
+                    Date: Tue, 27 Apr 2021 12:24:50 GMT,Tue, 27 Apr 2021 12:24:50 GMT
+                    X-Powered-By: PHP/7.4.13
+                    Content-Type: a...
+Forms             : {}
+Headers           : {[Host, 127.0.0.1:8000], [Connection, close], [Cache-Control, no-cache, private], [Date, Tue, 27 Apr 2021 12:24:50 GMT,Tue, 27 Apr 2021 12:24:50 GMT]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 515
+```
+
+Busca uma unica cidade pelo id
+```sh
+PS C:\xampp\htdocs\openweather\api> curl http://127.0.0.1:8000/api/cities/1
+```
+Resposta
+```sh
+StatusCode        : 200
+StatusDescription : OK
+Content           : {"id":1,"name":"Santa Maria","latitude":"-29.6841666667","longitude":"-53.8069444444","gmt":-3,"created_at":null,"updated_at":null}
+RawContent        : HTTP/1.1 200 OK
+                    Host: 127.0.0.1:8000
+                    Connection: close
+                    Cache-Control: no-cache, private
+                    Date: Tue, 27 Apr 2021 12:26:27 GMT,Tue, 27 Apr 2021 12:26:27 GMT
+                    X-Powered-By: PHP/7.4.13
+                    Content-Type: a...
+Forms             : {}
+Headers           : {[Host, 127.0.0.1:8000], [Connection, close], [Cache-Control, no-cache, private], [Date, Tue, 27 Apr 2021 12:26:27 GMT,Tue, 27 Apr 2021 12:26:27 GMT]...}
+Images            : {}
+InputFields       : {}
+Links             : {}
+ParsedHtml        : System.__ComObject
+RawContentLength  : 131
+```
+
+#### Outras funções da API
+
+Além de consulta é possivel realizar o cadastro, update e delete de cidades pela api. a conversão do corpo da requisição pode variar de acordo com o sistema de conversão de strings usado pelo terminal.
+
+
+Cadastro exemplo.
+```sh
+curl -X POST http://127.0.0.1:8000/api/cities -H "Content-Type: application/json" -d '{"name":"São Pedro do Sul","latitude":"-29.6841666667","longitude":"-53.8069444444","gmt":-3}'
+
+```
+
+Update de dados
+
+```sh
+curl -X PUT http://127.0.0.1:8000/api/cities/6 -H "Content-Type: application/json" -d '{"name":"São Pedro do Sul","latitude":"-29.6841666667","longitude":"-53.8069444444","gmt":-3}'
+```
+
+Delete
+```sh
+curl -X DELETE http://127.0.0.1:8000/api/cities/5
+```
+
+
+
+
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
